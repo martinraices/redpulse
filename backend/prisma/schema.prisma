@@ -1,0 +1,204 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model bets {
+  id               BigInt    @id @default(autoincrement())
+  bet_ref          String    @unique @db.VarChar(100)
+  player_id        BigInt
+  market_id        BigInt
+  provider_id      BigInt
+  game_id          BigInt
+  placed_at        DateTime  @db.Timestamptz(6)
+  settled_at       DateTime? @db.Timestamptz(6)
+  status           String    @db.VarChar(30)
+  currency_code    String    @db.Char(3)
+  stake_amount     Decimal   @db.Decimal(18, 2)
+  payout_amount    Decimal   @default(0) @db.Decimal(18, 2)
+  bonus_bet_amount Decimal   @default(0) @db.Decimal(18, 2)
+  is_real_money    Boolean   @default(true)
+  created_at       DateTime  @default(now()) @db.Timestamptz(6)
+  games            games     @relation(fields: [game_id], references: [id], onUpdate: NoAction)
+  markets          markets   @relation(fields: [market_id], references: [id], onUpdate: NoAction)
+  players          players   @relation(fields: [player_id], references: [id], onUpdate: NoAction)
+  providers        providers @relation(fields: [provider_id], references: [id], onUpdate: NoAction)
+
+  @@index([game_id], map: "idx_bets_game_id")
+  @@index([game_id, settled_at], map: "idx_bets_game_settled")
+  @@index([market_id], map: "idx_bets_market_id")
+  @@index([market_id, settled_at], map: "idx_bets_market_settled")
+  @@index([placed_at], map: "idx_bets_placed_at")
+  @@index([player_id], map: "idx_bets_player_id")
+  @@index([provider_id], map: "idx_bets_provider_id")
+  @@index([provider_id, settled_at], map: "idx_bets_provider_settled")
+  @@index([settled_at], map: "idx_bets_settled_at")
+  @@index([status], map: "idx_bets_status")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model bonuses {
+  id                BigInt    @id @default(autoincrement())
+  bonus_ref         String    @unique @db.VarChar(100)
+  player_id         BigInt
+  market_id         BigInt
+  bonus_type        String    @db.VarChar(50)
+  campaign_name     String?   @db.VarChar(100)
+  issued_at         DateTime  @db.Timestamptz(6)
+  activated_at      DateTime? @db.Timestamptz(6)
+  expired_at        DateTime? @db.Timestamptz(6)
+  status            String    @db.VarChar(30)
+  issued_amount     Decimal   @db.Decimal(18, 2)
+  bonus_cost_amount Decimal   @default(0) @db.Decimal(18, 2)
+  created_at        DateTime  @default(now()) @db.Timestamptz(6)
+  markets           markets   @relation(fields: [market_id], references: [id], onUpdate: NoAction)
+  players           players   @relation(fields: [player_id], references: [id], onUpdate: NoAction)
+
+  @@index([bonus_type], map: "idx_bonuses_bonus_type")
+  @@index([issued_at], map: "idx_bonuses_issued_at")
+  @@index([market_id], map: "idx_bonuses_market_id")
+  @@index([market_id, issued_at], map: "idx_bonuses_market_issued")
+  @@index([player_id], map: "idx_bonuses_player_id")
+  @@index([status], map: "idx_bonuses_status")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model deposits {
+  id               BigInt    @id @default(autoincrement())
+  deposit_ref      String    @unique @db.VarChar(100)
+  player_id        BigInt
+  market_id        BigInt
+  requested_at     DateTime  @db.Timestamptz(6)
+  processed_at     DateTime? @db.Timestamptz(6)
+  status           String    @db.VarChar(30)
+  currency_code    String    @db.Char(3)
+  amount           Decimal   @db.Decimal(18, 2)
+  payment_method   String?   @db.VarChar(50)
+  is_first_deposit Boolean   @default(false)
+  created_at       DateTime  @default(now()) @db.Timestamptz(6)
+  markets          markets   @relation(fields: [market_id], references: [id], onUpdate: NoAction)
+  players          players   @relation(fields: [player_id], references: [id], onUpdate: NoAction)
+
+  @@index([market_id], map: "idx_deposits_market_id")
+  @@index([market_id, processed_at], map: "idx_deposits_market_processed")
+  @@index([player_id], map: "idx_deposits_player_id")
+  @@index([processed_at], map: "idx_deposits_processed_at")
+  @@index([status], map: "idx_deposits_status")
+}
+
+model games {
+  id          BigInt    @id @default(autoincrement())
+  provider_id BigInt
+  game_code   String    @db.VarChar(100)
+  name        String    @db.VarChar(150)
+  category    String    @db.VarChar(50)
+  is_active   Boolean   @default(true)
+  created_at  DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime  @default(now()) @db.Timestamptz(6)
+  bets        bets[]
+  providers   providers @relation(fields: [provider_id], references: [id], onUpdate: NoAction)
+
+  @@unique([provider_id, game_code], map: "uq_games_provider_code")
+  @@index([provider_id], map: "idx_games_provider_id")
+}
+
+model markets {
+  id                BigInt              @id @default(autoincrement())
+  code              String              @unique @db.VarChar(10)
+  name              String              @db.VarChar(100)
+  region            String?             @db.VarChar(100)
+  currency_code     String              @db.Char(3)
+  is_active         Boolean             @default(true)
+  created_at        DateTime            @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime            @default(now()) @db.Timestamptz(6)
+  bets              bets[]
+  bonuses           bonuses[]
+  deposits          deposits[]
+  players           players[]
+  technical_metrics technical_metrics[]
+  withdrawals       withdrawals[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model players {
+  id               BigInt        @id @default(autoincrement())
+  player_ref       String        @unique @db.VarChar(64)
+  market_id        BigInt
+  registration_at  DateTime      @db.Timestamptz(6)
+  first_deposit_at DateTime?     @db.Timestamptz(6)
+  status           String        @default("active") @db.VarChar(30)
+  is_test          Boolean       @default(false)
+  segment          String?       @db.VarChar(30)
+  created_at       DateTime      @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime      @default(now()) @db.Timestamptz(6)
+  bets             bets[]
+  bonuses          bonuses[]
+  deposits         deposits[]
+  markets          markets       @relation(fields: [market_id], references: [id], onUpdate: NoAction)
+  withdrawals      withdrawals[]
+
+  @@index([first_deposit_at], map: "idx_players_first_deposit_at")
+  @@index([is_test], map: "idx_players_is_test")
+  @@index([market_id], map: "idx_players_market_id")
+  @@index([registration_at], map: "idx_players_registration_at")
+}
+
+model providers {
+  id         BigInt   @id @default(autoincrement())
+  code       String   @unique @db.VarChar(50)
+  name       String   @db.VarChar(100)
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @db.Timestamptz(6)
+  bets       bets[]
+  games      games[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model technical_metrics {
+  id           BigInt   @id @default(autoincrement())
+  market_id    BigInt?
+  metric_type  String   @db.VarChar(50)
+  service_name String?  @db.VarChar(100)
+  measured_at  DateTime @db.Timestamptz(6)
+  numerator    Decimal? @db.Decimal(18, 4)
+  denominator  Decimal? @db.Decimal(18, 4)
+  value        Decimal  @db.Decimal(18, 4)
+  unit         String   @db.VarChar(20)
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+  markets      markets? @relation(fields: [market_id], references: [id], onDelete: Restrict, onUpdate: NoAction)
+
+  @@index([market_id], map: "idx_technical_market")
+  @@index([market_id, metric_type, measured_at], map: "idx_technical_market_type_time")
+  @@index([measured_at], map: "idx_technical_measured_at")
+  @@index([metric_type], map: "idx_technical_metric_type")
+  @@index([metric_type, measured_at], map: "idx_technical_type_measured")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model withdrawals {
+  id             BigInt    @id @default(autoincrement())
+  withdrawal_ref String    @unique @db.VarChar(100)
+  player_id      BigInt
+  market_id      BigInt
+  requested_at   DateTime  @db.Timestamptz(6)
+  processed_at   DateTime? @db.Timestamptz(6)
+  status         String    @db.VarChar(30)
+  currency_code  String    @db.Char(3)
+  amount         Decimal   @db.Decimal(18, 2)
+  payment_method String?   @db.VarChar(50)
+  created_at     DateTime  @default(now()) @db.Timestamptz(6)
+  markets        markets   @relation(fields: [market_id], references: [id], onUpdate: NoAction)
+  players        players   @relation(fields: [player_id], references: [id], onUpdate: NoAction)
+
+  @@index([market_id], map: "idx_withdrawals_market_id")
+  @@index([market_id, processed_at], map: "idx_withdrawals_market_processed")
+  @@index([player_id], map: "idx_withdrawals_player_id")
+  @@index([processed_at], map: "idx_withdrawals_processed_at")
+  @@index([status], map: "idx_withdrawals_status")
+}
