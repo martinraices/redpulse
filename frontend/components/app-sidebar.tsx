@@ -1,80 +1,59 @@
+'use client'
+import Link from "next/link";
+import { navigationItems } from "@/config/navigation";
+import { usePathname } from "next/navigation";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar"
-
-const data = [
-    {
-        title:"Dashboard",
-        url : "/dashboard",
-    },
-    {
-        title:"Players",
-        url : "/players",
-    },
-    {
-        title:"Revenue",
-        url : "/revenue",
-    },
-    {
-        title:"Marketing",
-        url : "/marketing",
-    }
-    ,{
-        title:"Bonuses",
-        url : "/bonuses",
-    },
-    {
-        title:"Games",
-        url : "/games",
-    },
-    {
-        title:"Payment",
-        url : "/payment",
-    },
-    {
-        title:"Risk and Fraud",
-        url : "/riskAndFraud",
-    },
-    {
-        title:"Reports",
-        url : "/reports",
-    }
-]
-    
-
-
+} from "@/components/ui/sidebar";
 
 export function AppSidebar() {
+  const pathname = usePathname();
   return (
-    <Sidebar >
-      <SidebarHeader>
-      Red Pulse </SidebarHeader>
+    <Sidebar>
+      <SidebarHeader className="px-4 py-4 text-lg font-semibold">
+        Red Pulse
+      </SidebarHeader>
+
       <SidebarContent>
-          <SidebarGroup >
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {data.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton >
-                      <a href={item.url}>{item.title}</a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
- 
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {navigationItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton
+                    isActive={pathname === item.url}
+                    className="
+                        text-sidebar-foreground
+                        hover:bg-sidebar-accent
+                        hover:text-sidebar-accent-foreground
+                        data-[active=true]:bg-sidebar-accent
+                        data-[active=true]:text-sidebar-accent-foreground
+                    "
+                  >
+                    <Link
+                      href={item.url}
+                      className="flex w-full items-center gap-2"
+                    >
+                      <item.icon className="h-4 w-4" />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
+
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }
