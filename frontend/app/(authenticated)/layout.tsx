@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-
+import { AppSidebar } from "@/components/app-sidebar";
 import {
   SidebarProvider,
   SidebarInset,
@@ -11,12 +11,10 @@ export default function AuthenticatedLayout({
   children: ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-slate-950 text-white">
-      <aside className="w-64 border-r border-slate-800 bg-slate-900">
-        Sidebar
-      </aside>
- 
 
+  <SidebarProvider>
+        <AppSidebar />
+      <SidebarInset>
       <div className="flex flex-1 flex-col">
         <header className="h-16 border-b border-slate-800 bg-slate-900">
           Header
@@ -26,8 +24,9 @@ export default function AuthenticatedLayout({
           {children}
         </main>
       </div>
-  </div>
 
+  </SidebarInset>
+   </SidebarProvider>
 
   );
 }
