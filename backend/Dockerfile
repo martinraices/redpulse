@@ -11,4 +11,4 @@ RUN DATABASE_URL="postgresql://unused:unused@localhost:5432/unused" npx prisma g
 
 EXPOSE 3001
 
-CMD ["npm", "run", "start:dev"]
+CMD ["sh", "-c", "npx prisma generate && npm run start:dev"]
