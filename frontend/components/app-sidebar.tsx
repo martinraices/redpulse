@@ -1,7 +1,7 @@
-'use client'
-import Link from "next/link";
-import { navigationItems } from "@/config/navigation";
-import { usePathname } from "next/navigation";
+'use client';
+import Link from 'next/link';
+import { navigationItems } from '@/config/navigation';
+import { usePathname } from 'next/navigation';
 import {
   Sidebar,
   SidebarContent,
@@ -12,10 +12,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar";
+} from '@/components/ui/sidebar';
 
 export function AppSidebar() {
   const pathname = usePathname();
+
   return (
     <Sidebar>
       <SidebarHeader className="px-4 py-4 text-lg font-semibold">
@@ -31,11 +32,7 @@ export function AppSidebar() {
                   <SidebarMenuButton
                     isActive={pathname === item.url}
                     className="
-                        text-sidebar-foreground
-                        hover:bg-sidebar-accent
-                        hover:text-sidebar-accent-foreground
-                        data-[active=true]:bg-sidebar-accent
-                        data-[active=true]:text-sidebar-accent-foreground
+                    text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground
                     "
                   >
                     <Link
