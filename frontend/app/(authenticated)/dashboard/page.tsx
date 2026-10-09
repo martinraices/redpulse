@@ -1,13 +1,12 @@
-import { activePlayersCard } from '@/data/dashboard';
+import { activePlayersCard, depositCards } from '@/data/dashboard';
+import { KpiCard } from '@/components/dashboard/kpi-card';
 
 export default function DashboardPage() {
-  const Icon = activePlayersCard.icon;
   return (
     <div>
       <h1 className="text-2xl font-semibold">Dashboard</h1>
-      <Icon />
-      <p>{activePlayersCard.title}</p>
-      <p>{activePlayersCard.value}</p>
+      <KpiCard {...activePlayersCard} />
+      <KpiCard {...depositCards} />
     </div>
   );
 }
