@@ -1,22 +1,71 @@
 import type { SummaryCardData } from '@/types/dashboard';
-import { Users } from 'lucide-react';
-import { CircleEuro } from 'lucide-react';
+import {
+  Users,
+  CircleEuro,
+  Funnel,
+  Gift,
+  ShieldCheck,
+  Globe,
+} from 'lucide-react';
 
 export const activePlayersCard: SummaryCardData = {
   icon: Users,
   title: 'Active Players',
+  format: 'number',
   value: 24532,
   comparison: 12,
   status: 'current',
-  targetRoute: 'View details',
+  targetRoute: '/players',
 };
 
-export const depositCards: SummaryCardData = {
+export const depositCard: SummaryCardData = {
   icon: CircleEuro,
-  title: 'Deposits Players',
-  currency: '£',
+  title: 'Deposits',
+  format: 'currency',
   value: 892430,
+  currency: 'GBP',
   comparison: 18,
   status: 'current',
-  targetRoute: 'View details',
+  targetRoute: '/payment',
+};
+
+export const conversionRateCard: SummaryCardData = {
+  icon: Funnel,
+  title: 'Conversion Rate',
+  format: 'percentage',
+  value: 8.4,
+  comparison: 0.6,
+  status: 'current',
+  targetRoute: '/players',
+};
+
+export const bonusCostCard: SummaryCardData = {
+  icon: Gift,
+  title: 'Bonus Cost',
+  format: 'currency',
+  value: 143230,
+  currency: 'GBP',
+  comparison: -6,
+  status: 'current',
+  targetRoute: '/bonuses',
+};
+
+export const systemUptimeCard: SummaryCardData = {
+  icon: ShieldCheck,
+  title: 'System Uptime',
+  format: 'percentage',
+  value: 99.98,
+  comparison: 0.01,
+  status: 'current',
+  targetRoute: '/reports',
+};
+
+export const regionsCard: SummaryCardData = {
+  icon: Globe,
+  title: 'Regions',
+  format: 'number',
+  value: 18,
+  comparison: 2,
+  status: 'current',
+  targetRoute: '/marketing',
 };
