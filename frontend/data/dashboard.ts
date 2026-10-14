@@ -1,4 +1,7 @@
-import type { SummaryCardData } from '@/types/dashboard';
+import type {
+  SummaryCardData,
+  RevenuePrimaryCardData,
+} from '@/types/dashboard';
 import {
   Users,
   CircleEuro,
@@ -68,4 +71,16 @@ export const regionsCard: SummaryCardData = {
   comparison: 2,
   status: 'current',
   targetRoute: '/marketing',
+};
+
+export const revenuePrimaryCard: RevenuePrimaryCardData = {
+  title: 'Revenue',
+  subtitle: 'Gross and net gaming revenue with daily trend',
+  ggrValue: 845230,
+  ggrComparison: 12,
+  ngrValue: 712480,
+  ngrComparison: 9,
+  monthlyRevenueChange: 8.4,
+  periodLabel: 'Last 30 days',
+  currency: 'GBP',
 };

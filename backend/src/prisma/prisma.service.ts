@@ -3,11 +3,11 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../generated/prisma/client.js';
 
 @Injectable()
-export class PrismaService
-  extends PrismaClient
-  implements OnModuleInit
-{
+export class PrismaService extends PrismaClient implements OnModuleInit {
   constructor() {
+    console.log('DATABASE_URL exists:', !!process.env.DATABASE_URL);
+    console.log('DATABASE_URL type:', typeof process.env.DATABASE_URL);
+
     const adapter = new PrismaPg({
       connectionString: process.env.DATABASE_URL!,
     });

@@ -10,3 +10,15 @@ export interface SummaryCardData {
   status: 'current' | 'delayed' | 'unavailable';
   targetRoute: string;
 }
+
+export interface RevenuePrimaryCardData {
+  title: string;
+  subtitle: string;
+  ggrValue: number;
+  ggrComparison: number;
+  ngrValue: number;
+  ngrComparison: number;
+  monthlyRevenueChange: number;
+  periodLabel: string;
+  currency: 'GBP' | 'USD' | 'EUR';
+}
