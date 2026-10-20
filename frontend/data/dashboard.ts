@@ -9,6 +9,7 @@ import {
   Gift,
   ShieldCheck,
   Globe,
+  Gamepad,
 } from 'lucide-react';
 
 export const activePlayersCard: SummaryCardData = {
@@ -71,6 +72,25 @@ export const regionsCard: SummaryCardData = {
   comparison: 2,
   status: 'current',
   targetRoute: '/marketing',
+};
+
+export const gamesCard: SummaryCardData = {
+  icon: Gamepad,
+  title: 'Games',
+  format: 'number',
+  value: 0,
+  comparison: 0,
+  status: 'current',
+  targetRoute: '/games',
+};
+export const retentionCard: SummaryCardData = {
+  icon: Gamepad,
+  title: 'Retention',
+  format: 'percentage',
+  value: 0,
+  comparison: 0,
+  status: 'current',
+  targetRoute: '/retention',
 };
 
 export const revenuePrimaryCard: RevenuePrimaryCardData = {

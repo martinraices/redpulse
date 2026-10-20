@@ -14,7 +14,7 @@ export class DashboardService {
     startOfDay.setHours(0, 0, 0, 0);
 
     const thirtyDaysAgo = new Date(startOfDay);
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 60);
 
     // REVENUE
     // GGR = total settled real-money stakes - total payouts.

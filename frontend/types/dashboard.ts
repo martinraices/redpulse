@@ -22,3 +22,26 @@ export interface RevenuePrimaryCardData {
   periodLabel: string;
   currency: 'GBP' | 'USD' | 'EUR';
 }
+export interface DashboardSummaryResponse {
+  revenue: {
+    value: number;
+  };
+  players: {
+    value: number;
+  };
+  retention: {
+    value: number;
+  };
+  games: {
+    value: number;
+  };
+  bonus: {
+    value: number;
+  };
+  technical: {
+    value: number;
+  };
+  geography: {
+    value: number;
+  };
+}
